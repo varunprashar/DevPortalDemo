@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kust-dev-portal
+  name: kust-dev-portal
+  selfLink: /apis/apps/v1/namespaces/dev01/deployments/dev-portal  
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: kust-dev-portal
+  template:
+    metadata:
+      labels:
+        app: kust-dev-portal
+    spec:
+      containers:
+        - image: artifactory.amctheatres.com/consumer-docker/developer-portal:3079
+          imagePullPolicy: Always
+          name: kust-dev-portal
+          ports:
+            - containerPort: 8003
+              name: kust-dev-portal
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1250m
+              memory: 2Gi
+            requests:
+              cpu: 50m
+              memory: 300Mi
+          volumeMounts:
+          - mountPath: /app/appsettings.json
+            name: appsettings-volume
+            subPath: appsettings.json
+      imagePullSecrets:
+       - name: artifactory-varun-secret
+      volumes:
+      - configMap:          
+          name: config-map
+        name: appsettings-volume

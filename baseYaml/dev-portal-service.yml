@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kust-dev-portal
+  labels:
+    app: kust-dev-portal
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8003
+  selector:
+    app: kust-dev-portal
